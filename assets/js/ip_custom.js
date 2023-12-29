@@ -1,21 +1,48 @@
 jQuery(document).ready( function($) {
     $('#save_itsperfect_config').on('click', function(e) {
+
+      
         var url = $('#itsperfect_base_url').val();
         var token = $('#itsperfect_api_token').val();
-        $(".btn").attr("disabled");
+        var product_status = $('#product_status').val();
+
+        var product_title_format = [];
+        $(".product_title_format:checked").each(function() { 
+            product_title_format.push($(this).val()); 
+        }); 
+           // console.log(product_title_format);
+
+            var webhooks = [];
+            $(".webhooks:checked").each(function() { 
+                webhooks.push($(this).val()); 
+            }); 
+
+          
+
+         
+            
+            $('.loading').css('display', 'block');
+             $(".btn").attr("disabled");
 
         if(url && token){
             var data = {
                 action: 'kp_ip_save_config',
                 ip_base_url: url,
-                ip_api_token: token
+                ip_api_token: token,
+                product_status: product_status,
+                product_title_format: product_title_format,
+                webhooks: webhooks,
+              
             };
             // the_ajax_script.ajaxurl is a variable that will contain the url to the ajax processing file
             $.post(the_ajax_script.ajaxurl, data, function(response) {
                 // $("#createvariations").removeAttr('disabled');
                 // $("#orderlists").css('opacity', 'unset');
                 // $("#UpdateOrdersLoader").css('display','none');
+                $('.loading').css('display', 'none');
                 $(".btn").removeAttr("disabled");
+              
+                
                 $("#modalcontent").html(response);
                 $("#notificationmodal").modal("show");
             });
@@ -24,6 +51,7 @@ jQuery(document).ready( function($) {
         }
         return false;
     });
+
 
 
 

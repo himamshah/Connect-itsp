@@ -5,7 +5,7 @@
 session_start();
 
 /**
- * Plugin Name: Itsperfect Integration black and gold
+ * Plugin Name: Itsperfect Integration
  * Plugin URI: http://scrumwheel.com/
  * Description: Itsperfect Integration with woocommerce
  * Version: 2.0
@@ -86,6 +86,27 @@ function ip_load_custom_scripts_styles(){
 //     wp_enqueue_script( 'ip-custom-js', plugins_url( 'assets/js/ip_custom.js', __FILE__ ) , array() , time() );
 // }
 
+
+
+function plugin_rewrite_rule() {
+    add_rewrite_rule('webhook/?$', 'index.php?custom_endpoint=webhook', 'top');
+}
+add_action('init', 'plugin_rewrite_rule');
+
+
+function custom_query_vars($vars) {
+    $vars[] = 'custom_endpoint';
+    return $vars;
+}
+add_filter('query_vars', 'custom_query_vars');
+
+function custom_plugin_endpoint_handler() {
+    if (get_query_var('custom_endpoint')) {
+        include(plugin_dir_path(__FILE__) . 'webhook.php');
+        exit();
+    }
+}
+add_action('template_redirect', 'custom_plugin_endpoint_handler');
 
 /**
  * Creates menu for the plugin in the admin section.
@@ -317,7 +338,7 @@ function kp_update_product_index(){
         
         $products = wc_get_products( 
             array( 
-                'status' => 'publish,draft',
+                'status' => 'publish',
                 'limit' => -1 
             )
         );
@@ -341,7 +362,7 @@ function kp_manage_orders_index(){
             'limit' => 9999,
             // 'return' => 'ids',
             // 'date_completed' => '2018-10-01...2018-10-10',
-            // 'status' => 'processing,on-hold,completed,pending-payment,cancelled'
+             'status' => 'processing,on-hold,completed,pending-payment,cancelled'
         );
         
         $query = new WC_Order_Query( $args );
@@ -381,6 +402,35 @@ function kp_settings_index($message = ''){
         }
         else{
             $ip_api_token = $wc_auth[0]->setting_value;
+        }
+
+        $query = "SELECT * FROM {$wpdb->base_prefix}erp_settings where module = 'product_status'";
+        $wc_auth = $wpdb->get_results($query);
+        if(empty($wc_auth)){
+            $product_status = '';
+        }
+        else{
+            $product_status = $wc_auth[0]->setting_value;
+        }
+
+        $query = "SELECT * FROM {$wpdb->base_prefix}erp_settings where module = 'product_title_format'";
+        $wc_auth = $wpdb->get_results($query);
+        if(empty($wc_auth)){
+            $product_title_format = array();
+        }
+        else{
+            $product_title_format = explode(",",$wc_auth[0]->setting_value);
+          
+            
+        }
+
+        $query = "SELECT * FROM {$wpdb->base_prefix}erp_settings where module = 'webhooks'";
+        $wc_auth = $wpdb->get_results($query);
+        if(empty($wc_auth)){
+            $webhooks = array();
+        }
+        else{
+            $webhooks = explode(",",$wc_auth[0]->setting_value);
         }
 
         include KP_BASE_PATH."views/ip_settings_index.php";
@@ -479,6 +529,18 @@ function kp_ip_save_config(){
         $token = $_POST['ip_api_token'];
     }
 
+    if(isset($_POST['product_status'])){
+        $product_status = $_POST['product_status'];
+    }
+
+    if(isset($_POST['product_title_format'])){
+        $product_title_format = implode(",",$_POST['product_title_format']);
+    }
+
+    if(isset($_POST['webhooks'])){
+        $webhooks = implode(",", $_POST['webhooks']);
+    }
+
     if($urlstart && $token){
         $data = itsperfect_get_items('',20,1,$urlstart,$token);  // erpid, limit, page
         
@@ -511,6 +573,47 @@ function kp_ip_save_config(){
                 $query = "UPDATE {$wpdb->base_prefix}erp_settings set setting_value = '$token' , modified_at = '$date' where id = ".$id;
                 $wpdb->query($query);
             }
+
+              //for product status
+              $query = "SELECT * FROM {$wpdb->base_prefix}erp_settings where module = 'product_status'";
+              $wc_auth = $wpdb->get_results($query);
+              $date = date("Y-m-d H:i:s");
+              if(empty($wc_auth)){
+                  $query = "INSERT INTO {$wpdb->base_prefix}erp_settings (`module`,`setting_module`,`setting_value`,`created_at`,`modified_at`) values ('product_status','product_status','$product_status','$date','$date')";
+                  $wpdb->query($query);
+              }else{
+                  $id = $wc_auth[0]->id;
+                  $query = "UPDATE {$wpdb->base_prefix}erp_settings set setting_value = '$product_status' , modified_at = '$date' where id = ".$id;
+                  $wpdb->query($query);
+              }
+  
+                //for product title format
+                $query = "SELECT * FROM {$wpdb->base_prefix}erp_settings where module = 'product_title_format'";
+                $wc_auth = $wpdb->get_results($query);
+                $date = date("Y-m-d H:i:s");
+                if(empty($wc_auth)){
+                    $query = "INSERT INTO {$wpdb->base_prefix}erp_settings (`module`,`setting_module`,`setting_value`,`created_at`,`modified_at`) values ('product_title_format','product_title_format','$product_title_format','$date','$date')";
+                    $wpdb->query($query);
+                }else{
+                    $id = $wc_auth[0]->id;
+                    $query = "UPDATE {$wpdb->base_prefix}erp_settings set setting_value = '$product_title_format' , modified_at = '$date' where id = ".$id;
+                    $wpdb->query($query);
+                }
+  
+                //webhooks
+                $query = "SELECT * FROM {$wpdb->base_prefix}erp_settings where module = 'webhooks'";
+                $wc_auth = $wpdb->get_results($query);
+                $date = date("Y-m-d H:i:s");
+                if(empty($wc_auth)){
+                    $query = "INSERT INTO {$wpdb->base_prefix}erp_settings (`module`,`setting_module`,`setting_value`,`created_at`,`modified_at`) values ('webhooks','webhooks','$webhooks','$date','$date')";
+                    $wpdb->query($query);
+                }else{
+                    $id = $wc_auth[0]->id;
+                    $query = "UPDATE {$wpdb->base_prefix}erp_settings set setting_value = '$webhooks' , modified_at = '$date' where id = ".$id;
+                    $wpdb->query($query);
+                }
+
+            
 
             $GLOBALS['apiStart'] = $urlstart;
             $GLOBALS['token'] = $token;
@@ -802,6 +905,11 @@ function create_parent($erp_item_id='',$resarray=array()){
     
     $data = $resarray[$erp_item_id];
 
+    $width = $data->dimensions->width;
+    $height = $data->dimensions->height;
+    $depth = $data->dimensions->depth;
+    $weight = $data->dimensions->weight;
+
     // $sql = "SELECT setting_value FROM {$wpdb->base_prefix}erp_settings where module = 'item' and setting_module='createitemby'";
     // $result = $wpdb->get_results($sql);
     $result = array('1');
@@ -868,15 +976,54 @@ function create_parent($erp_item_id='',$resarray=array()){
                     continue;
                 }
 
-                $item_category_group = $data->itemGroup->itemGroup;
+                $product_status = 'draft';
+                $product_name = '';
+                $query = "SELECT * FROM {$wpdb->base_prefix}erp_settings where module = 'product_status'";
+                $wc_auth = $wpdb->get_results($query);
+                if(empty($wc_auth)){
+                    $product_status = '';
+                }
+                else{
+                    $product_status = $wc_auth[0]->setting_value;
+                }
+
+                $query = "SELECT * FROM {$wpdb->base_prefix}erp_settings where module = 'product_title_format'";
+                $wc_auth = $wpdb->get_results($query);
+                if(empty($wc_auth)){
+                    $product_title_format = '';
+                }
+                else{
+                    $product_title_format = explode(",",$wc_auth[0]->setting_value);
+                    if(in_array('brand_name',$product_title_format))
+                    {
+                        $product_name .=   "TET.responsiblewear - ";
+                    }
+                    if(in_array('item_group',$product_title_format))
+                    {
+                        $item_category_group = $data->itemGroup->itemGroup;
+                        $product_name .=   $item_category_group." - ";
+                    }
+                 
+                  }
+                  $product_name .=  $data->item." - ".$color->color;
+
+              //  $item_category_group = $data->itemGroup->itemGroup;
 
                 // Creating a variable product
                 $product = new WC_Product_Variable();
 
                 // Name and image would be enough
-                $product->set_name( "Black and Gold - ".$item_category_group." - ".$data->item." - ".$color->color );
+              /*  $product->set_name( "Black and Gold - ".$item_category_group." - ".$data->item." - ".$color->color );
                 $product->set_sku($data->itemNumber);
                 $product->set_status( 'publish' ); 
+*/
+                $product->set_name( $product_name );
+
+                $custom_sku = $data->itemNumber.$color->colorNumber;
+                $product->set_sku($custom_sku);
+                
+                $product->set_status( $product_status ); 
+
                 $product->set_catalog_visibility( 'visible' );
                 
                 $desc = '';
@@ -886,6 +1033,11 @@ function create_parent($erp_item_id='',$resarray=array()){
 
                 $product->set_description($desc);
                 $product->set_short_description($desc);
+
+                $product->set_width($width);
+                $product->set_height($height);
+                $product->set_length($depth);
+                $product->set_weight($weight);
 
                 $wpcategories = array();
                 $wp_parent_categories = array();
@@ -931,6 +1083,49 @@ function create_parent($erp_item_id='',$resarray=array()){
                 }
                
                 $product->set_category_ids( $wpcategories );
+
+
+                    //tags addition
+                    $tags = array();
+                    //static itsperfect tag
+                    $tag_term = wp_insert_term( "From Itsperfect", 'product_tag', array(
+                        'description' => "Product that come from itsperfect", // optional
+                        'parent' => 0,      // optional
+                    ) );
+    
+                    if(isset($tag_term->error_data['term_exists'])){
+                        $tag_id = $tag_term->error_data['term_exists'];
+                    }
+    
+                    if(is_array($tag_term)){
+                        if(isset($tag_term['term_id'])){
+                            $tag_id = $tag_term['term_id'];
+                        }    
+                    }
+    
+                    $tags[] = $tag_id;
+                    
+    
+                    if(!empty($data->season->season)){
+                        $season = $data->season->season;
+                        $tag_term = wp_insert_term( "$season", 'product_tag', array(
+                            'description' => "Season imported from itsperfect", // optional
+                            'parent' => 0,      // optional
+                        ) );
+    
+                        if(isset($tag_term->error_data['term_exists'])){
+                            $tag_id = $tag_term->error_data['term_exists'];
+                        }
+    
+                        if(is_array($tag_term)){
+                            if(isset($tag_term['term_id'])){
+                                $tag_id = $tag_term['term_id'];
+                            }    
+                        }
+                        $tags[] = $tag_id;
+                    }
+                    $product->set_tag_ids( $tags );
+    
 
                 $related_erp_ids = array();
                 
@@ -1047,6 +1242,18 @@ function create_parent($erp_item_id='',$resarray=array()){
                 update_post_meta( $product->get_id(),'_product_attributes', $theData);
                 
                 $product->update_meta_data("meta_erp_product_id", $data->id);
+
+                $video_code = '';
+                if($data->video){
+                    if(!empty($data->video->code)){
+                        $video_code = $data->video->code;
+                    }
+                }
+                if(!empty($video_code)){
+                    $video_url = 'https://www.youtube.com/watch?v='.$video_code;
+                    update_post_meta($product->get_id(),'_nickx_video_text_url',$video_url);
+                }
+
                 // save the changes and go on
                 $product->save(); 
                 $product_id = $product->get_id();
@@ -1325,11 +1532,46 @@ function update_product($wp_product_id = ''){
                 foreach($updated_erp_data->colors as $key=>$erp_color){
                     if(trim_color($erp_color->color) == trim_color($productcolor)){
                         $data = $updated_erp_data;
+
+                        $width = $data->dimensions->width;
+                        $height = $data->dimensions->height;
+                        $depth = $data->dimensions->depth;
+                        $weight = $data->dimensions->weight;
+
+                        $product_name = '';
+                      
+        
+                        $query = "SELECT * FROM {$wpdb->base_prefix}erp_settings where module = 'product_title_format'";
+                        $wc_auth = $wpdb->get_results($query);
+                        if(empty($wc_auth)){
+                            $product_title_format = '';
+                        }
+                        else{
+                            $product_title_format = explode(",",$wc_auth[0]->setting_value);
+                            if(in_array('brand_name',$product_title_format))
+                            {
+                                $product_name .=   "TET.responsiblewear - ";
+                            }
+                            if(in_array('item_group',$product_title_format))
+                            {
+                                $item_category_group = $data->itemGroup->itemGroup;
+                                $product_name .=   $item_category_group." - ";
+                            }
+                         
+                          }
+                          $product_name .=  $data->item." - ".$erp_color->color;
+
+
+                      //  $product->set_name( $data->item." - ".$erp_color->color );
+                         $product->set_name(  $product_name );
+                        $custom_sku = $data->itemNumber."".$erp_color->colorNumber;
+                        $product->set_sku($custom_sku);
+                        /*
                         $item_category_group = $data->itemGroup->itemGroup;
 
                         $product->set_name( "Black and Gold - ".$item_category_group." - ".$data->item." - ".$erp_color->color );
                         $product->set_sku($data->itemNumber);
-                        $product->set_status( 'publish' ); 
+                        $product->set_status( 'publish' ); */
                         $product->set_catalog_visibility( 'visible' );
                         
                         $desc = '';
@@ -1339,6 +1581,11 @@ function update_product($wp_product_id = ''){
 
                         $product->set_description($desc);
                         $product->set_short_description($desc);
+
+                        $product->set_width($width);
+                        $product->set_height($height);
+                        $product->set_length($depth);
+                        $product->set_weight($weight);
 
                         $wpcategories = array();
                         $wp_parent_categories = array();
@@ -1402,6 +1649,47 @@ function update_product($wp_product_id = ''){
                        
                         $product->set_category_ids( $final_wp_categories );
 
+                          //tags addition
+                          $tags = array();
+                          //static itsperfect tag
+                          $tag_term = wp_insert_term( "From Itsperfect", 'product_tag', array(
+                              'description' => "Product that come from itsperfect", // optional
+                              'parent' => 0,      // optional
+                          ) );
+  
+                          if(isset($tag_term->error_data['term_exists'])){
+                              $tag_id = $tag_term->error_data['term_exists'];
+                          }
+  
+                          if(is_array($tag_term)){
+                              if(isset($tag_term['term_id'])){
+                                  $tag_id = $tag_term['term_id'];
+                              }    
+                          }
+  
+                          $tags[] = $tag_id;
+                          
+  
+                          if(!empty($data->season->season)){
+                              $season = $data->season->season;
+                              $tag_term = wp_insert_term( "$season", 'product_tag', array(
+                                  'description' => "Season imported from itsperfect", // optional
+                                  'parent' => 0,      // optional
+                              ) );
+  
+                              if(isset($tag_term->error_data['term_exists'])){
+                                  $tag_id = $tag_term->error_data['term_exists'];
+                              }
+  
+                              if(is_array($tag_term)){
+                                  if(isset($tag_term['term_id'])){
+                                      $tag_id = $tag_term['term_id'];
+                                  }    
+                              }
+                              $tags[] = $tag_id;
+                          }
+                          $product->set_tag_ids( $tags );
+
                         $product->save();
 
                         // time taking image attachments
@@ -1437,6 +1725,12 @@ function update_product($wp_product_id = ''){
                             }
                         }
                         update_post_meta($product->get_id(), '_product_image_gallery', implode(',',$img_ids));
+
+                         // Update the dimensions for this variation
+                         $product->update_meta_data('_length', $depth);
+                         $product->update_meta_data('_width', $width);
+                         $product->update_meta_data('_height', $height);
+                         $product->update_meta_data('_weight', $weight);
 
                         $related_erp_ids = array();
                         foreach($data->relatedItems as $key=>$relateditem){
@@ -1520,6 +1814,17 @@ function update_product($wp_product_id = ''){
                         if($erp_color->discountPercentage){
                             $discount_amount = (float)($erp_color->salesListPrice * ($erp_color->discountPercentage/100));
                             $sale_price = (float)($data->salesListPrice - $discount_amount);
+                        }
+
+                        $video_code = '';
+                        if($data->video){
+                            if(!empty($data->video->code)){
+                                $video_code = $data->video->code;
+                            }
+                        }
+                        if(!empty($video_code)){
+                            $video_url = 'https://www.youtube.com/watch?v='.$video_code;
+                            update_post_meta($product->get_id(),'_nickx_video_text_url',$video_url);
                         }
 
                         //deleting all old variations
@@ -2633,6 +2938,41 @@ function kp_update_stock(){
     }
     
     echo $t." Total product's stock updated ! ";
+
+    $message = $t." Total product's stock updated at ".get_site_url();
+
+    $slack_request = array();
+    $slack_request["channel"] = "tetresponsible_stock_updates";
+    $slack_request["blocks"] = array();
+    $temp["type"]  = "section";
+    $temp["text"]["type"] = "mrkdwn";
+    $temp["text"]["text"] = "`$message`";
+    array_push($slack_request["blocks"],$temp);
+
+    $slack_request = json_encode($slack_request);
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://slack.com/api/chat.postMessage",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS =>"$slack_request",
+        CURLOPT_HTTPHEADER => array(
+            "Content-Type: application/json",
+            "Authorization: Bearer xoxb-1551726777605-1553661642502-pPFKfCjcOkOJtZqquEnX6tzC"
+        ),
+    ));
+
+    $slack_response = curl_exec($curl);
+
+    curl_close($curl);
+
     wp_die();
 }
 

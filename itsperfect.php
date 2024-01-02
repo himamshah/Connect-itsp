@@ -2,6 +2,9 @@
 // ini_set('display_errors', 1);
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
+
+use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
+
 session_start();
 
 /**
@@ -63,7 +66,7 @@ function ip_load_custom_scripts_styles(){
      else
          $page = 'ip_dashboard';
 
-    if( $page == 'ip_create_product' || $page == 'ip_dashboard' || $page == 'ip_update_product' || $page == 'ip_manage_orders' || $page == 'ip_settings' || $page == "ecologi-settings" || $page == 'ecologi-dashboard') {
+    if( $page == 'ip_create_product' || $page == 'ip_dashboard' || $page == 'ip_update_product' || $page == 'ip_manage_orders' || $page == 'ip_settings' || $page == "ecologi-settings" || $page == 'ecologi-dashboard' || $page == 'wc-orders') {
         wp_enqueue_style( 'bootstrap', plugins_url('assets/css/bootstrap.min.css', __FILE__) );
     
         wp_enqueue_style( 'dataTables.bootstrap', plugins_url('assets/css/dataTables.bootstrap.min.css', __FILE__) );
@@ -2808,15 +2811,23 @@ function add_custom_order_status_actions_button( $actions, $order ) {
 }
 
 
-
 /**
  * Adding resync button to the order edit page.
  */
-add_meta_box( 'custom_other_field', __('Itsperfect Sync','woocommerce'), 'add_custom_other_field_content', 'shop_order', 'side', 'core' );
+add_action('add_meta_boxes_woocommerce_page_wc-orders', 'add_custom_other_field_content', 10);
+
+
+add_meta_box( 'custom_other_field', __('Itsperfect Sync','woocommerce'), 'add_custom_other_field_content', 'shop_order', 'side', 'high' );
 if ( ! function_exists( 'add_custom_other_field_content' ) )
 {
     function add_custom_other_field_content( $post )
     {
+        $meta = $post->get_meta('_mollie_payment_instructions');
+        
+        $screen = wc_get_container()->get(CustomOrdersTableController::class)->custom_orders_table_usage_is_enabled()
+            ? wc_get_page_screen_id('shop-order')
+            : 'shop_order';
+
         $order = wc_get_order($post->ID); // Get the WC_Order object
 
         $erp_order_status = get_post_meta($post->ID,'erp_order_status');
@@ -2835,13 +2846,16 @@ if ( ! function_exists( 'add_custom_other_field_content' ) )
         }
         
         $gif =  get_site_url()."/wp-content/plugins/itsperfect/ajax-loader.gif";
-
-        if($erp_order_id != '' && $erp_order_status == 'synced'){
-            echo '<button id="'.$post->ID.'" class="button button-primary resync_order">Re-sync</button>
-                <img src="'.$gif.'" class="gif" style="display:none">';
-        }else { 
-            echo '<button id="'.$post->ID.'" class="button button-primary sync_order">Sync</button><img src="'.$gif.'" class="gif" style="display:none"> <br><br> This order is not yet synced !';
-        }
+        
+        add_meta_box('custom_order_fields', __('Itsperfect Resync order', 'itsperfect-resync-order'), static function () use ($meta,$post,$gif,$erp_order_id,$erp_order_status) {
+            $allowedTags = ['strong' => []];
+            if($erp_order_id != '' && $erp_order_status == 'synced'){
+                printf('<button id="'.$post->ID.'" class="button button-primary resync_order">Re-sync</button>
+                <img src="'.$gif.'" class="gif" style="display:none">') ;
+            }else { 
+                return '<button id="'.$post->ID.'" class="button button-primary sync_order">Sync</button><img src="'.$gif.'" class="gif" style="display:none"> <br><br> This order is not yet synced !';
+            }
+        }, $screen, 'side', 'high');
     }
 }
 /**

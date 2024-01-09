@@ -56,7 +56,7 @@
                             <span>Update stock quantities</span>
                             <br><span><sub>This will refresh all stock quantities for all exisitng products.</sub></span>
 
-                            <button style="margin-left:31%" class="btn btn-info btn-sm" id="update_stock">Refresh Stock</button>
+                            <button style="margin-left:31%" class="btn btn-primary btn-sm" id="update_stock">Refresh Stock</button>
                         </div>
 
                         <div class="custom-mt">

@@ -6,7 +6,7 @@
     margin-top : 25px;
 }
 
-.btn-primary,.button-primary
+.btn-primary,.button-primary,.btn-primary:hover 
 {
     background:  #FFD613 !important;
     border-color:#FFD613 !important;

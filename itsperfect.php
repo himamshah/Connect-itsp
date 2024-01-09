@@ -116,7 +116,7 @@ add_action('template_redirect', 'custom_plugin_endpoint_handler');
  */
 add_action('admin_menu', 'kp_register_options_page');
 function kp_register_options_page() {
-    add_menu_page('Itsperfect Integration', 'Itsperfect Integration', 'manage_options', 'ip_dashboard', 'kp_dashboard');
+    add_menu_page('Itsperfect Integration', 'Itsperfect Integration', 'manage_options', 'ip_dashboard', 'kp_dashboard',  plugins_url('itsperfect/logo.png'),);
     add_submenu_page( 'ip_dashboard', 'Create Products', 'Create Products', 'manage_options', 'ip_create_product', 'kp_create_product_index');
     add_submenu_page( 'ip_dashboard', 'Update Products', 'Update Products', 'manage_options', 'ip_update_product', 'kp_update_product_index');
     add_submenu_page( 'ip_dashboard', 'Manage Orders', 'Manage Orders', 'manage_options', 'ip_manage_orders', 'kp_manage_orders_index');

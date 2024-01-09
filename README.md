@@ -34,4 +34,9 @@ This WordPress plugin integrates Itsperfect with WooCommerce, providing seamless
 
 ## Support
 
+<<<<<<< HEAD
 For support or issues, please visit [Scrumwheel Technologies](http://scrumwheel.com/).
+=======
+For support or issues, please visit [Scrumwheel Technologies](http://scrumwheel.com/).
+
+>>>>>>> d9726a055c0fb98338acb4ffe8d3d55cf05a149b

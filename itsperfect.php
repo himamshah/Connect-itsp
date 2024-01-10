@@ -999,7 +999,7 @@ function create_parent($erp_item_id='',$resarray=array()){
                     $product_title_format = explode(",",$wc_auth[0]->setting_value);
                     if(in_array('brand_name',$product_title_format))
                     {
-                        $product_name .=   "TET.responsiblewear - ";
+                        $product_name .=   "Black and Gold - ";
                     }
                     if(in_array('item_group',$product_title_format))
                     {
@@ -1554,7 +1554,7 @@ function update_product($wp_product_id = ''){
                             $product_title_format = explode(",",$wc_auth[0]->setting_value);
                             if(in_array('brand_name',$product_title_format))
                             {
-                                $product_name .=   "TET.responsiblewear - ";
+                                $product_name .=   "Black And Gold - ";
                             }
                             if(in_array('item_group',$product_title_format))
                             {
@@ -1880,6 +1880,8 @@ function update_product($wp_product_id = ''){
                 }
             }
             else{
+                $product->set_status('draft');
+                $product->save();
                 $message = "We couldn't get the response from itsperfect API !!";
             }
         }

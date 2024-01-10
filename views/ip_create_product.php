@@ -19,55 +19,76 @@
             
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <div style="margin-top:2%">
-                        <h5>Account Name : <strong>Black and Gold</strong></h5>
+               
+                <table  style="margin-top:2%">
+                        <tr>
+                            <td colspan="9">
+                                <h5>Account Name : <strong>Black and Gold</strong></h5>
+                            </td>
+                        </tr>
+                      
+                        <tr>
+                            <td colspan="9" >
+                            <div class="custom-mt">
+                                <span>Import Categories</span>
+                                <br><span><sub>We advise you to sync categories before creating products so that categories can be mapped with products.</sub></span>
+                                </div></td><td colspan="3" >
+                                <button class="btn btn-primary btn-sm" id="import_categories">Import</button>
+                            </td>
+                        </tr>
+                   
+                        <tr>
+                            <td colspan="9" >
+                            <div class="custom-mt">
+                                <span>There are total <?php echo $count; ?> products on your itsperfect account. Import all at once without images</span>
+                                <br><span><sub>Products will be created without images for job's performance.</sub></span>
+                            </div></td><td colspan="3">
 
+                                <button  class="btn btn-primary btn-sm" id="import_all">Import All</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="9" >
+                            <div class="custom-mt">
+                                <span>Import images</span>
+                                <br><span><sub>This might take a while so it will run in parts, you will get notified once it's complete.</sub></span>
+                                </div></td><td colspan="3" >
 
-                        <div class="custom-mt">
-                            <span>Import Categories</span>
-                            <br><span><sub>We advise you to sync categories before creating products so that categories can be mapped with products.</sub></span>
+                                <button class="btn btn-primary btn-sm" id="import_images">Start Import</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="9" >
+                            <div class="custom-mt">
+                                <span>Reset products & product's categories (If needed ask the dev to enable this) </span>
+                                <br><span><sub>We advise you to use this carefully as this will wipe out all products & categories permanently.</sub></span>
+                                </div></td><td colspan="3" >
 
-                            <button style="margin-left:9.5%" class="btn btn-primary btn-sm" id="import_categories">Import</button>
-                        </div>
+                                <button disabled  class="btn btn-danger btn-sm" id="reset_all">Reset</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="9" >
+                            <div class="custom-mt">
+                                <span>Update stock quantities</span>
+                                <br><span><sub>This will refresh all stock quantities for all existing products.</sub></span>
+                                </div> </td><td colspan="3" >
 
-                        <div class="custom-mt">
-                            <span style="margin-top:20px">There are total <?php echo $count; ?> products on your itsperfect account. Import all at once without images</span>
-                            <br><span><sub>Products will be created without images for job's performance.</sub></span>
-                            
-                            <button style="margin-left:30%" class="btn btn-primary btn-sm" id="import_all">Import All</button>
-                        </div>
+                                <button  class="btn btn-primary btn-sm" id="update_stock">Refresh Stock</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="9" >
+                            <div class="custom-mt">
+                                <span>Set default variations</span>
+                                <br><span><sub>This will set the default variation in all variable products.</sub></span>
+                                </div></td><td colspan="3" >
 
-                        <div class="custom-mt">
-                            <span>Import images</span>
-                            <br><span><sub>This might take a while so it will run in parts, you will get notified once its complete.</sub></span>
+                                <button  class="btn btn-primary btn-sm" id="set_default_variations">Set</button>
+                            </td>
+                        </tr>
+                    </table>
 
-                            <button style="margin-left:20%" class="btn btn-primary btn-sm" id="import_images">Start Import</button>
-                        </div>
-
-
-                        <div class="custom-mt">
-                            <span>Reset products & product's categories (If needed ask the dev to enable this) </span>
-                            <br><span><sub>We advise you to use this carefully as this will wipe out all products & categories permenantly.</sub></span>
-
-                            <button disabled style="margin-left:17%" class="btn btn-danger btn-sm" id="reset_all">Reset</button>
-                        </div>
-
-                        <div class="custom-mt">
-                            <span>Update stock quantities</span>
-                            <br><span><sub>This will refresh all stock quantities for all exisitng products.</sub></span>
-
-                            <button style="margin-left:31%" class="btn btn-primary btn-sm" id="update_stock">Refresh Stock</button>
-                        </div>
-
-                        <div class="custom-mt">
-                            <span>Set default variations</span>
-                            <br><span><sub>This will set default variation in all variable products.</sub></span>
-
-                            <button style="margin-left:37%" class="btn btn-primary btn-sm" id="set_default_variations">Set</button>
-                        </div>
-
-
-                    </div>
 
                     
                 </div>

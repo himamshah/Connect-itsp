@@ -1832,6 +1832,8 @@ function update_product($wp_product_id = ''){
                             update_post_meta($product->get_id(),'_nickx_video_text_url',$video_url);
                         }
 
+                  // old code for delete variation and upload new
+/*
                         //deleting all old variations
                         $variations = $product->get_children();
                         if($variations){
@@ -1873,7 +1875,49 @@ function update_product($wp_product_id = ''){
                                     }
                                 }
                             }
-                        }
+                        }*/
+
+                            // new code for update existing variation without delete it
+                                                    
+
+                            if ($product->get_id()) {
+                                // Get existing variations
+                                $variations = $product->get_children();
+
+                                foreach ($data->barcodes as $key => $bar_obj) {
+                                    if (trim_color($bar_obj->color->color) == trim_color($erp_color->color)) {
+                                        if ($bar_obj->barcode) {
+                                            foreach ($variations as $variation_id) {
+                                                $variation = wc_get_product($variation_id);
+
+                                                if ($variation->get_sku() == $bar_obj->barcode) {
+                                                    // Update existing variation
+                                                    $variation->set_regular_price($data->salesListPrice);
+                                                    
+                                                    if ($sale_price) {
+                                                        $variation->set_sale_price($sale_price);
+                                                    }
+
+                                                    $variation->set_stock_quantity(10);
+
+                                                    // Additional updates for size and attributes
+                                                    $bar_obj->size->size = strtolower($bar_obj->size->size);
+                                                    $bar_obj->size->size = str_replace(": ", "-", $bar_obj->size->size);
+                                                    $bar_obj->size->size = str_replace(" ", "-", $bar_obj->size->size);
+                                                    $temp_size = (string) $bar_obj->size->size;
+                                                    update_post_meta($variation->get_id(), 'attribute_pa_size', "$temp_size");
+                                                    update_post_meta($variation->get_id(), 'erp_barcode', $bar_obj->barcode);
+
+                                                    // Save changes
+                                                    $variation->save();
+
+                                                    break; // Exit the loop once the variation is updated
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
                         $message = "Product : ".$product->get_id()." is successfully updated.";
                     }

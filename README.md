@@ -27,9 +27,10 @@ This WordPress plugin integrates Itsperfect with WooCommerce, providing seamless
 
 ## Screenshots
 
-![image](https://github.com/himamshah/itsperfect/assets/109145679/f9399540-0f8f-486b-8638-9690e31011e7)
+![image](https://github.com/himamshah/itsperfect/assets/109145679/2c669940-e353-40af-9b18-216fb01d8fef)
 
-![image](https://github.com/himamshah/itsperfect/assets/109145679/20cce677-ab77-46bd-b715-612b81d83ed9)
+![image](https://github.com/himamshah/itsperfect/assets/109145679/98583a3b-d8fe-4176-9fdb-845e0cdcb6a1)
+
 
 
 ## Support

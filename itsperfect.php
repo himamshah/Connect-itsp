@@ -25,7 +25,19 @@ define('KP_BASE_URL', plugin_dir_url(__FILE__));
 include_once(ABSPATH . 'wp-config.php');
 include_once(ABSPATH . 'wp-includes/class-wpdb.php');
 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+require 'wp-guard/src/WpGuard.php';
 
+$guard = new Anystack\WpGuard\V001\WpGuard(
+    __FILE__,
+    [
+        'api_key' => '53a7d079-449b-4c90-8b70-55073c96a5d9',
+        'product_id' => '9b12f162-b8b5-465a-a579-6c091ee0e764',
+        'product_name' => 'itsperfect',
+        'updater' => [
+            'enabled' => true, // Enable auto-updater
+        ]
+    ]
+);
 global $wpdb;
 $queryurl = "SELECT * FROM {$wpdb->base_prefix}erp_settings where module = 'api_url'";
 $api_auth = $wpdb->get_results($queryurl);
@@ -117,12 +129,15 @@ add_action('template_redirect', 'custom_plugin_endpoint_handler');
 add_action('admin_menu', 'kp_register_options_page');
 function kp_register_options_page() {
     add_menu_page('Itsperfect Integration', 'Itsperfect Integration', 'manage_options', 'ip_dashboard', 'kp_dashboard',  plugins_url('itsperfect/logo.png'),);
+   
     add_submenu_page( 'ip_dashboard', 'Create Products', 'Create Products', 'manage_options', 'ip_create_product', 'kp_create_product_index');
     add_submenu_page( 'ip_dashboard', 'Update Products', 'Update Products', 'manage_options', 'ip_update_product', 'kp_update_product_index');
     add_submenu_page( 'ip_dashboard', 'Manage Orders', 'Manage Orders', 'manage_options', 'ip_manage_orders', 'kp_manage_orders_index');
     add_submenu_page( 'ip_dashboard', 'Itsperfect Settings', 'Itsperfect Settings', 'manage_options', 'ip_settings', 'kp_settings_index');
 }
 
+$guard->validCallback(function() {
+});
 
 /*
  * Index Page
@@ -139,6 +154,11 @@ function kp_dashboard(){
 /**
  * Create product view page
  */
+function kp_create_product_index()
+{
+    echo "you need to activate license key in order to use the plugin";
+}
+$guard->validCallback(function() {
 function kp_create_product_index(){
     if(kp_settings_exists()){
         $count = 0;
@@ -148,12 +168,18 @@ function kp_create_product_index(){
         $_SESSION['data'] = $data;
         $count = count($data);
 
+       
+
         include KP_BASE_PATH."views/ip_create_product.php";
+      
     }
     else{
         kp_settings_index();
     }
 }
+});
+
+
 
 /**
  * Import Categories
@@ -336,6 +362,11 @@ function GetCategories(){
 /**
  * Update product view page
  */
+function kp_update_product_index()
+{
+    echo "you need to activate license key in order to use the plugin";
+}
+$guard->validCallback(function() {
 function kp_update_product_index(){
     if(kp_settings_exists()){
         
@@ -353,11 +384,17 @@ function kp_update_product_index(){
     }
     
 }
+});
 
 
 /**
  * Manage orders index page
  */
+function kp_manage_orders_index()
+{
+    echo "you need to activate license key in order to use the plugin";
+}
+$guard->validCallback(function() {
 function kp_manage_orders_index(){
     if(kp_settings_exists()){
 
@@ -378,7 +415,7 @@ function kp_manage_orders_index(){
         kp_settings_index();
     }
 }
-
+});
 
 /**
  * Settings page for itsperfect

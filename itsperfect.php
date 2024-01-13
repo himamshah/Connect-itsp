@@ -27,10 +27,12 @@ include_once(ABSPATH . 'wp-includes/class-wpdb.php');
 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 require 'wp-guard/src/WpGuard.php';
 
+global $guard;
+
 $guard = new Anystack\WpGuard\V001\WpGuard(
     __FILE__,
     [
-        'api_key' => '53a7d079-449b-4c90-8b70-55073c96a5d9',
+        'api_key' => 'AAKMwpKVGrWAArktuIXOgtKSem5p3cYT',
         'product_id' => '9b12f162-b8b5-465a-a579-6c091ee0e764',
         'product_name' => 'itsperfect',
         'updater' => [
@@ -60,7 +62,6 @@ if(empty($api_token)){
 
 $GLOBALS['apiStart'] = $apiStart;
 $GLOBALS['token'] = $token;
-
 
 /**
  * Below line allows duplicated SKU in woocommerce which is needed to create products by colors
@@ -123,6 +124,7 @@ function custom_plugin_endpoint_handler() {
 }
 add_action('template_redirect', 'custom_plugin_endpoint_handler');
 
+
 /**
  * Creates menu for the plugin in the admin section.
  */
@@ -135,8 +137,9 @@ function kp_register_options_page() {
     add_submenu_page( 'ip_dashboard', 'Manage Orders', 'Manage Orders', 'manage_options', 'ip_manage_orders', 'kp_manage_orders_index');
     add_submenu_page( 'ip_dashboard', 'Itsperfect Settings', 'Itsperfect Settings', 'manage_options', 'ip_settings', 'kp_settings_index');
 }
-
+// Assuming $guard is an instance of your guard class
 $guard->validCallback(function() {
+   
 });
 
 /*
@@ -154,13 +157,11 @@ function kp_dashboard(){
 /**
  * Create product view page
  */
-function kp_create_product_index()
-{
-    echo "you need to activate license key in order to use the plugin";
-}
-$guard->validCallback(function() {
-function kp_create_product_index(){
-    if(kp_settings_exists()){
+if ($guard->validCallback(function() { }))
+{ 
+    function kp_create_product_index(){
+
+     if(kp_settings_exists()){
         $count = 0;
         $data = array();
         $_SESSION['data'] = array();
@@ -176,8 +177,16 @@ function kp_create_product_index(){
     else{
         kp_settings_index();
     }
+    }
 }
-});
+else
+{
+    function kp_create_product_index(){
+
+             echo "<div>You do not have permission to access this page.Please get Licence version of itsperfect</div>";
+    }
+};
+
 
 
 
@@ -362,11 +371,9 @@ function GetCategories(){
 /**
  * Update product view page
  */
-function kp_update_product_index()
-{
-    echo "you need to activate license key in order to use the plugin";
-}
-$guard->validCallback(function() {
+if ($guard->validCallback(function() { }))
+{ 
+
 function kp_update_product_index(){
     if(kp_settings_exists()){
         
@@ -384,18 +391,23 @@ function kp_update_product_index(){
     }
     
 }
-});
+}
+else
+{
+    function kp_update_product_index(){
+
+             echo "<div>You do not have permission to access this page.Please get Licence version of itsperfect</div>";
+    }
+};
 
 
 /**
  * Manage orders index page
  */
-function kp_manage_orders_index()
-{
-    echo "you need to activate license key in order to use the plugin";
-}
-$guard->validCallback(function() {
-function kp_manage_orders_index(){
+
+ if ($guard->validCallback(function() { }))
+ { 
+ function kp_manage_orders_index(){
     if(kp_settings_exists()){
 
         $args = array(
@@ -415,7 +427,15 @@ function kp_manage_orders_index(){
         kp_settings_index();
     }
 }
-});
+}
+else
+{
+    function kp_manage_orders_index(){
+
+             echo "<div>You do not have permission to access this page.Please get Licence version of itsperfect</div>";
+    }
+};
+
 
 /**
  * Settings page for itsperfect

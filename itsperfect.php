@@ -1,7 +1,7 @@
 <?php
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
+ ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+ error_reporting(E_ALL);
 
 use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
 
@@ -142,10 +142,15 @@ $guard->validCallback(function() {
    
 });
 
+
+
+
 /*
  * Index Page
  * */
 function kp_dashboard(){
+
+    
     if(kp_settings_exists()){
         include KP_BASE_PATH."views/ip_dashboard.php";
     }
@@ -157,8 +162,8 @@ function kp_dashboard(){
 /**
  * Create product view page
  */
-if ($guard->validCallback(function() { }))
-{ 
+//if ($guard->validCallback(function() { }))
+//{ 
     function kp_create_product_index(){
 
      if(kp_settings_exists()){
@@ -178,14 +183,14 @@ if ($guard->validCallback(function() { }))
         kp_settings_index();
     }
     }
-}
+/*}
 else
 {
     function kp_create_product_index(){
 
              echo "<div>You do not have permission to access this page.Please get Licence version of itsperfect</div>";
     }
-};
+}*/
 
 
 
@@ -193,6 +198,8 @@ else
 /**
  * Import Categories
  */
+$guard->validCallback(function() {
+
 add_action('wp_ajax_import_categories','import_categories');
 function import_categories(){
     $erp_categories = GetCategories();
@@ -323,7 +330,7 @@ function import_categories(){
     echo "Categories are synced !";
     wp_die();
 }
-
+});
 
 /**
  * Function to get categories from itsperfect.
@@ -371,8 +378,6 @@ function GetCategories(){
 /**
  * Update product view page
  */
-if ($guard->validCallback(function() { }))
-{ 
 
 function kp_update_product_index(){
     if(kp_settings_exists()){
@@ -391,22 +396,14 @@ function kp_update_product_index(){
     }
     
 }
-}
-else
-{
-    function kp_update_product_index(){
 
-             echo "<div>You do not have permission to access this page.Please get Licence version of itsperfect</div>";
-    }
-};
 
 
 /**
  * Manage orders index page
  */
 
- if ($guard->validCallback(function() { }))
- { 
+ 
  function kp_manage_orders_index(){
     if(kp_settings_exists()){
 
@@ -427,14 +424,8 @@ else
         kp_settings_index();
     }
 }
-}
-else
-{
-    function kp_manage_orders_index(){
 
-             echo "<div>You do not have permission to access this page.Please get Licence version of itsperfect</div>";
-    }
-};
+
 
 
 /**
@@ -793,6 +784,8 @@ function kp_is_woo_active(){
 /*
  * Create ajax Multiple products 
  */
+$guard->validCallback(function() {
+
 add_action('wp_ajax_create_multiple_products', 'create_multiple_products');
 function create_multiple_products(){
     try {
@@ -866,10 +859,12 @@ function create_multiple_products(){
     }
 }
 
-
+});
 /**
  * Create single product
  */
+$guard->validCallback(function() {
+
 add_action('wp_ajax_ca_create_single_product','create_single_product');
 function create_single_product($erp_item_id = '',$resarray = array()){
     $summary = '';
@@ -903,7 +898,7 @@ function create_single_product($erp_item_id = '',$resarray = array()){
 
     echo $summary;
 }
-
+});
 /**
  * Call itsperfect API for creating/fetching items
  */
@@ -953,6 +948,8 @@ function get_itsperfect_items($idarray = array()){
 /**
  * Function which creates main parent products from itsperfect.
  */
+$guard->validCallback(function() {
+
 function create_parent($erp_item_id='',$resarray=array()){
     ini_set('max_execution_time', 10101010101);
     ini_set('default_socket_timeout', 10101010101);
@@ -1368,12 +1365,14 @@ function create_parent($erp_item_id='',$resarray=array()){
     
     return $message;
 }
-
+});
 
 
 /**
  * Function which creates product's variations
  */
+$guard->validCallback(function() {
+
 function create_product_variation( $product_id, $variation_data ){
     // Get the Variable product object (parent)
     $product = wc_get_product($product_id);
@@ -1457,11 +1456,13 @@ function create_product_variation( $product_id, $variation_data ){
 
     $variation->save(); // Save the data
 }
-
+});
 
 /**
  * Function which imports images for existing products from itsperfect.
  */
+$guard->validCallback(function() {
+
 add_action('wp_ajax_import_images','import_images');
 function import_images(){
     global $wpdb;
@@ -1551,10 +1552,13 @@ function import_images(){
     echo "Total ".count($products)." product's images are updated.";
     wp_die();
 }
+});
 
 /**
  * Function that updates a specific product in wordpress
  */
+$guard->validCallback(function() {
+
 add_action('wp_ajax_update_product','update_product');
 function update_product($wp_product_id = ''){
     global $wpdb;
@@ -1994,7 +1998,7 @@ function update_product($wp_product_id = ''){
     echo $message;
     // wp_die();
 }
-
+});
 
 /**
  * trim unnecessay thing before comaprision of colors
@@ -2085,6 +2089,8 @@ function rudr_upload_file_by_url( $image_url ) {
 /**
  * This function resets the entire store
  */
+$guard->validCallback(function() {
+
 add_action('wp_ajax_reset_store','kp_reset_store');
 function kp_reset_store(){
     global $wpdb;
@@ -2115,12 +2121,14 @@ function kp_reset_store(){
     wp_die();
 }
 
-
+});
 
 /**
  * This function sends order to itsperfect
  * Order management
  */
+$guard->validCallback(function() {
+
 add_action('wp_ajax_send_order_to_erp','send_order_to_erp');
 add_action('woocommerce_order_status_processing','send_order_to_erp',500000000); //this is the hook that gets called when order is successfully placed.
 function send_order_to_erp($order_id){
@@ -2608,7 +2616,7 @@ function send_order_to_erp($order_id){
     // wp_die();
 }
 
-
+});
 /**
  * This function creates user in itsperfect ERP system.
  */
@@ -2964,6 +2972,8 @@ if ( ! function_exists( 'add_custom_other_field_content' ) )
 /**
  * Stock refresh job 
  */
+$guard->validCallback(function() {
+
 add_action('wp_ajax_update_stock','kp_update_stock');
 function kp_update_stock(){
     $t = 0;
@@ -3095,7 +3105,7 @@ function kp_update_stock(){
     wp_die();
 }
 
-
+});
 
 /**
  * Register an product-custom-attribute taxonomy.
@@ -3147,6 +3157,8 @@ function kp_create_attribute_taxonomies() {
 /**
 * Set Default variations job
 */
+$guard->validCallback(function() {
+
 add_action('wp_ajax_set_default_variations','set_default_variations');
 function set_default_variations(){
     $t = 0;
@@ -3192,7 +3204,7 @@ function set_default_variations(){
 }
 
 
-
+});
 /**
  * Function that shows other colors of the products on the PDP
  */

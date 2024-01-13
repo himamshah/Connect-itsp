@@ -23,8 +23,8 @@ class AnystackApi extends Connector
 
     public function resolveBaseUrl(): string
     {
-        //return 'https://api.anystack.sh/v1';
-        return 'http://api.anystack.test/v1';
+        return 'https://api.anystack.sh/v1';
+       // return 'http://api.anystack.test/v1';
     }
 
     public function __construct(protected string $apiToken)

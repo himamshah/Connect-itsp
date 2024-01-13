@@ -109,7 +109,7 @@ class GuzzleSender implements Sender
     {
         $guzzleRequest = $this->createGuzzleRequest($pendingRequest);
         $guzzleRequestOptions = $this->createRequestOptions($pendingRequest);
-        $guzzleResponse = null;
+
         try {
             $guzzleResponse = $this->client->send($guzzleRequest, $guzzleRequestOptions);
         } catch (TransferException $exception) {
@@ -118,12 +118,12 @@ class GuzzleSender implements Sender
             // catch any new ones Guzzle release.
 
             if (! $exception instanceof RequestException) {
-              throw new FatalRequestException($exception, $pendingRequest);
+                throw new FatalRequestException($exception, $pendingRequest);
             }
 
             // Otherwise, we'll create a response.
 
-           return $this->createResponse($pendingRequest, $exception->getResponse(), $exception);
+            return $this->createResponse($pendingRequest, $exception->getResponse(), $exception);
         }
 
         return $this->createResponse($pendingRequest, $guzzleResponse);
@@ -207,7 +207,7 @@ class GuzzleSender implements Sender
      * @param \Exception|null $exception
      * @return \Anystack\WPGuard\V001\Saloon\Contracts\Response
      */
-    protected function createResponse(PendingRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse = null , Exception $exception = null): ResponseContract
+    protected function createResponse(PendingRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, Exception $exception = null): ResponseContract
     {
         /** @var class-string<\Saloon\Contracts\Response> $responseClass */
         $responseClass = $pendingSaloonRequest->getResponseClass();

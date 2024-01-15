@@ -107,9 +107,9 @@
 
                         <td>
                             <?php if($erp_order_id != '' && $erp_order_status == 'synced'){ ?>
-                                <button id="<?php echo $order['id']; ?>" class="button button-primary resync_order">Re-sync</button>
+                                <button id="<?php echo $order['id']; ?>" class="button button-primary custom-btn resync_order">Re-sync</button>
                             <?php }else { ?>
-                                <button id="<?php echo $order['id']; ?>" class="button button-primary sync_order">sync</button>
+                                <button id="<?php echo $order['id']; ?>" class="button button-primary custom-btn sync_order">sync</button>
                             <?php } ?>
                         </td>
                     </tr>

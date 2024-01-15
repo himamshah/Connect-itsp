@@ -7,7 +7,7 @@
             
             <img style="display:none;" src="<?php echo $gif; ?>" id="store_erp_items_data_loader" class="loading">
 
-            <button class="button button-primary ca_create_selected_product" style="float: right; display: none;margin-right: 10px">Import Products</button>
+            <button class="button button-primary custom-btn ca_create_selected_product" style="float: right; display: none;margin-right: 10px">Import Products</button>
           
 
             <nav>
@@ -33,7 +33,7 @@
                                 <span>Import Categories</span>
                                 <br><span><sub>We advise you to sync categories before creating products so that categories can be mapped with products.</sub></span>
                                 </div></td><td colspan="3" >
-                                <button class="btn btn-primary btn-sm" id="import_categories">Import</button>
+                                <button class="btn btn-primary custom-btn btn-sm" id="import_categories">Import</button>
                             </td>
                         </tr>
                    
@@ -44,7 +44,7 @@
                                 <br><span><sub>Products will be created without images for job's performance.</sub></span>
                             </div></td><td colspan="3">
 
-                                <button  class="btn btn-primary btn-sm" id="import_all">Import All</button>
+                                <button  class="btn btn-primary custom-btn btn-sm" id="import_all">Import All</button>
                             </td>
                         </tr>
                         <tr>
@@ -54,7 +54,7 @@
                                 <br><span><sub>This might take a while so it will run in parts, you will get notified once it's complete.</sub></span>
                                 </div></td><td colspan="3" >
 
-                                <button class="btn btn-primary btn-sm" id="import_images">Start Import</button>
+                                <button class="btn btn-primary custom-btn btn-sm" id="import_images">Start Import</button>
                             </td>
                         </tr>
                         <tr>
@@ -74,7 +74,7 @@
                                 <br><span><sub>This will refresh all stock quantities for all existing products.</sub></span>
                                 </div> </td><td colspan="3" >
 
-                                <button  class="btn btn-primary btn-sm" id="update_stock">Refresh Stock</button>
+                                <button  class="btn btn-primary  custom-btn btn-sm" id="update_stock">Refresh Stock</button>
                             </td>
                         </tr>
                         <tr>
@@ -84,7 +84,7 @@
                                 <br><span><sub>This will set the default variation in all variable products.</sub></span>
                                 </div></td><td colspan="3" >
 
-                                <button  class="btn btn-primary btn-sm" id="set_default_variations">Set</button>
+                                <button  class="btn btn-primary  custom-btn btn-sm" id="set_default_variations">Set</button>
                             </td>
                         </tr>
                     </table>
@@ -182,7 +182,7 @@
                                         <td><?php echo $value->itemNumber; ?></td>
                                         <td><?php echo $value->item; ?></td>
                                         <td>
-                                            <button id="<?php echo $value->id; ?>" class="button button-primary create_product">Create</button>
+                                            <button id="<?php echo $value->id; ?>" class="button button-primary custom-btn create_product">Create</button>
                                             <img style="display:none;" src="<?php echo $gif; ?>" id="loader_<?php echo $value->id; ?>">
                                         </td>
                                     </tr>

@@ -25,7 +25,7 @@
                         <td><?php echo $product->get_sku(); ?></td>
                         <td><?php echo $product->get_title(); ?></td>
                         <td><a target="_blank" href="<?php echo "https://blackandgold.itsperfect.it/producten/details/p_id=".$erpid  ?>"><?php echo $erpid; ?></a></td>
-                        <td><button id="<?php echo $product->get_id(); ?>" class="button button-primary update_product">Update</button></td>
+                        <td><button id="<?php echo $product->get_id(); ?>" class="button button-primary custom-btn update_product">Update</button></td>
                     </tr>
                 <?php } } ?>
             </tbody>

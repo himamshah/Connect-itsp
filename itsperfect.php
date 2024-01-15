@@ -1,22 +1,19 @@
 <?php
- //ini_set('display_errors', 1);
- //ini_set('display_startup_errors', 1);
- // error_reporting(E_ALL);
-
+session_start();
 use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
 
-session_start();
 
 /**
- * Plugin Name: Itsperfect Integration
+ * Plugin Name: Connect-itsp Integration
  * Plugin URI: http://scrumwheel.com/
- * Description: Itsperfect Integration with woocommerce
+ * Description: Connect-itsp Integration with woocommerce
  * Version: 2.0
  * Author: Scrumwheel Technologies
  * Author URI: http://scrumwheel.com/
  * License: GPLv2 or later
- * Text-Domain: Itsperfect Integration
+ * Text-Domain: Connect-itsp Integration
  */
+
 
 defined( 'ABSPATH' ) or die( 'Nope, not accessing this' );
 define('KP_BASE_PATH', plugin_dir_path(__FILE__));
@@ -25,7 +22,7 @@ define('KP_BASE_URL', plugin_dir_url(__FILE__));
 include_once(ABSPATH . 'wp-config.php');
 include_once(ABSPATH . 'wp-includes/class-wpdb.php');
 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-require 'wp-guard/src/WpGuard.php';
+require_once('wp-guard/src/WpGuard.php');
 
 global $guard;
 
@@ -130,18 +127,13 @@ add_action('template_redirect', 'custom_plugin_endpoint_handler');
  */
 add_action('admin_menu', 'kp_register_options_page');
 function kp_register_options_page() {
-    add_menu_page('Itsperfect Integration', 'Itsperfect Integration', 'manage_options', 'ip_dashboard', 'kp_dashboard',  plugins_url('itsperfect/logo.png'),);
+    add_menu_page('Connect-itsp Integration', 'Connect-itsp Integration', 'manage_options', 'ip_dashboard', 'kp_dashboard',  plugins_url('itsperfect/logo.png'),);
    
     add_submenu_page( 'ip_dashboard', 'Create Products', 'Create Products', 'manage_options', 'ip_create_product', 'kp_create_product_index');
     add_submenu_page( 'ip_dashboard', 'Update Products', 'Update Products', 'manage_options', 'ip_update_product', 'kp_update_product_index');
     add_submenu_page( 'ip_dashboard', 'Manage Orders', 'Manage Orders', 'manage_options', 'ip_manage_orders', 'kp_manage_orders_index');
-    add_submenu_page( 'ip_dashboard', 'Itsperfect Settings', 'Itsperfect Settings', 'manage_options', 'ip_settings', 'kp_settings_index');
+    add_submenu_page( 'ip_dashboard', 'Connect-itsp Settings', 'Connect-itsp Settings', 'manage_options', 'ip_settings', 'kp_settings_index');
 }
-// Assuming $guard is an instance of your guard class
-$guard->validCallback(function() {
-   
-});
-
 
 
 
@@ -548,6 +540,10 @@ function kp_deactivation(){
 
     $sql = "DROP TABLE {$wpdb->base_prefix}erp_settings";
     $wpdb->query($sql);
+   
+    
+
+
 }
 
 /**
@@ -3318,3 +3314,4 @@ function password_protection(){
 
     return $html;
 }
+?>

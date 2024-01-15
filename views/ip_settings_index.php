@@ -4,7 +4,7 @@
     <div class="wrap">
         <div class="row">
             <div class="col-md-12">
-                <h4>Itsperfect Configuration</h4>
+                <h4>Connect-itsp Configuration</h4>
                 <br>
 
                 <?php if($message){ ?>
@@ -17,7 +17,7 @@
 
                 <div class="form-row">
                     <div class="form-group col-md-4">
-                        <label for="itsperfect_base_url"><b>Itsperfect's base URL</b></label>
+                        <label for="itsperfect_base_url"><b>Connect-itsp's base URL</b></label>
                         <input type="url" name="ip_base_url" class="form-control" id="itsperfect_base_url"
                             placeholder="e.g. https://blackandgold.itsperfect.it/"
                             value="<?php if($ip_base_url){echo $ip_base_url;} ?>" required>
@@ -138,7 +138,7 @@
               
          </div>
     </div>
-    <button type="submit" id="save_itsperfect_config" class="btn btn-primary">Save</button>
+    <button type="submit" id="save_itsperfect_config" class="btn btn-primary custom-btn">Save</button>
 
     
 </form>

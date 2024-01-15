@@ -6,11 +6,11 @@
     margin-top : 25px;
 }
 
-.btn-primary,.button-primary,.btn-primary:hover 
+.custom-btn
 {
-    background:  #FFD613 !important;
-    border-color:#FFD613 !important;
-    color: #000 !important;
+    background:  #84834C !important;
+    border-color:#84834C !important;
+    color: #fff !important;
 }
 
 

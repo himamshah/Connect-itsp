@@ -1636,7 +1636,7 @@ function update_product($wp_product_id = ''){
 
                       //  $product->set_name( $data->item." - ".$erp_color->color );
                          $product->set_name(  $product_name );
-                         $custom_sku = $data->itemNumbe;
+                         $custom_sku = $data->itemNumber;
                         //$custom_sku = $data->itemNumber."".$erp_color->colorNumber;
                         $product->set_sku($custom_sku);
                         /*

@@ -42,7 +42,7 @@ class StatusCodeHelper
             306 => 'Switch Proxy',
             307 => 'Temporary Redirect',
             308 => 'Permanent Redirect',
-            400 => 'Bad Request',
+            400 => 'You need to activate the license key in order to use the plugin',
             401 => 'Unauthorized',
             402 => 'Payment Required',
             403 => 'Forbidden',

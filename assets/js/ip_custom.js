@@ -157,11 +157,16 @@ jQuery(document).ready( function($) {
                 $("#modalcontent").html(response);
                 $("#notificationmodal").modal("show");
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
+            error: function(jqXHR) {
                 $('.loading').css('display', 'none');
                 $(".btn").removeAttr("disabled");
-                $("#modalcontent").html(errorThrown);
-                $("#notificationmodal").modal("show");
+                if (jqXHR.status === 400) {
+                    $("#modalcontent").html("You need to activate the license key in order to use the plugin");
+                      $("#notificationmodal").modal("show");
+                } else {
+                    $("#modalcontent").html(jqXHR);
+                    $("#notificationmodal").modal("You need to activate the license key in order to use the plugin");
+                }
             }
         });
 
@@ -191,11 +196,16 @@ jQuery(document).ready( function($) {
                 $("#notificationmodal").modal("show");
                 $('#td_'+id).html("Product exists");
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
+            error: function(jqXHR) {
                 $('.loading').css('display', 'none');
                 $(".btn").removeAttr("disabled");
-                $("#modalcontent").html(errorThrown);
-                $("#notificationmodal").modal("show");
+                if (jqXHR.status === 400) {
+                    $("#modalcontent").html("You need to activate the license key in order to use the plugin");
+                      $("#notificationmodal").modal("show");
+                } else {
+                    $("#modalcontent").html(jqXHR);
+                    $("#notificationmodal").modal("You need to activate the license key in order to use the plugin");
+                }
             }
         });
 
@@ -225,11 +235,16 @@ jQuery(document).ready( function($) {
                 $("#modalcontent").html(response);
                 $("#notificationmodal").modal("show");
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
+            error: function(jqXHR) {
                 $('.loading').css('display', 'none');
                 $(".btn").removeAttr("disabled");
-                $("#modalcontent").html(errorThrown);
-                $("#notificationmodal").modal("show");
+                if (jqXHR.status === 400) {
+                    $("#modalcontent").html("You need to activate the license key in order to use the plugin");
+                      $("#notificationmodal").modal("show");
+                } else {
+                    $("#modalcontent").html(jqXHR);
+                    $("#notificationmodal").modal("You need to activate the license key in order to use the plugin");
+                }
             }
         });
         return false;
@@ -258,11 +273,16 @@ jQuery(document).ready( function($) {
                     $("#notificationmodal").modal("show");
                     window.location.reload();
                 },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                error: function(jqXHR) {
                     $('.loading').css('display', 'none');
                     $(".btn").removeAttr("disabled");
-                    $("#modalcontent").html(errorThrown);
-                    $("#notificationmodal").modal("show");
+                    if (jqXHR.status === 400) {
+                        $("#modalcontent").html("You need to activate the license key in order to use the plugin");
+                        $("#notificationmodal").modal("show");
+                    } else {
+                        $("#modalcontent").html(jqXHR);
+                        $("#notificationmodal").modal("You need to activate the license key in order to use the plugin");
+                    }
                 }
             });
           } else {
@@ -294,11 +314,16 @@ jQuery(document).ready( function($) {
                 $("#modalcontent").html(response);
                 $("#notificationmodal").modal("show");
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
+            error: function(jqXHR) {
                 $('.loading').css('display', 'none');
                 $(".btn").removeAttr("disabled");
-                $("#modalcontent").html(errorThrown);
-                $("#notificationmodal").modal("show");
+                if (jqXHR.status === 400) {
+                    $("#modalcontent").html("You need to activate the license key in order to use the plugin");
+                      $("#notificationmodal").modal("show");
+                } else {
+                    $("#modalcontent").html(jqXHR);
+                    $("#notificationmodal").modal("You need to activate the license key in order to use the plugin");
+                }
             }
         });
         
@@ -328,11 +353,16 @@ jQuery(document).ready( function($) {
                 $("#modalcontent").html(response);
                 $("#notificationmodal").modal("show");
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
+            error: function(jqXHR) {
                 $('.loading').css('display', 'none');
                 $(".btn").removeAttr("disabled");
-                $("#modalcontent").html(errorThrown);
-                $("#notificationmodal").modal("show");
+                if (jqXHR.status === 400) {
+                    $("#modalcontent").html("You need to activate the license key in order to use the plugin");
+                      $("#notificationmodal").modal("show");
+                } else {
+                    $("#modalcontent").html(jqXHR);
+                    $("#notificationmodal").modal("You need to activate the license key in order to use the plugin");
+                }
             }
         });
         
@@ -366,11 +396,16 @@ jQuery(document).ready( function($) {
                 $("#notificationmodal").modal("show");
                 $(".gif").css("display","none");
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                $('.loading').css('display', 'none');
+            error: function(jqXHR) {              
+                  $('.loading').css('display', 'none');
                 $(".btn").removeAttr("disabled");
-                $("#modalcontent").html(errorThrown);
-                $("#notificationmodal").modal("show");
+                if (jqXHR.status === 400) {
+                    $("#modalcontent").html("You need to activate the license key in order to use the plugin");
+                      $("#notificationmodal").modal("show");
+                } else {
+                    $("#modalcontent").html(jqXHR);
+                    $("#notificationmodal").modal("You need to activate the license key in order to use the plugin");
+                }
             }
         });
         
@@ -402,11 +437,16 @@ jQuery(document).ready( function($) {
                 $("#modalcontent").html(response);
                 $("#notificationmodal").modal("show");
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
+            error: function(jqXHR) {
                 $('.loading').css('display', 'none');
                 $(".btn").removeAttr("disabled");
-                $("#modalcontent").html(errorThrown);
-                $("#notificationmodal").modal("show");
+                if (jqXHR.status === 400) {
+                    $("#modalcontent").html("You need to activate the license key in order to use the plugin");
+                      $("#notificationmodal").modal("show");
+                } else {
+                    $("#modalcontent").html(jqXHR);
+                    $("#notificationmodal").modal("You need to activate the license key in order to use the plugin");
+                }
             }
         });
         
@@ -435,11 +475,16 @@ jQuery(document).ready( function($) {
                 $("#modalcontent").html(response);
                 $("#notificationmodal").modal("show");
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
+            error: function(jqXHR) {
                 $('.loading').css('display', 'none');
                 $(".btn").removeAttr("disabled");
-                $("#modalcontent").html(errorThrown);
-                $("#notificationmodal").modal("show");
+                if (jqXHR.status === 400) {
+                    $("#modalcontent").html("You need to activate the license key in order to use the plugin");
+                      $("#notificationmodal").modal("show");
+                } else {
+                    $("#modalcontent").html(jqXHR);
+                    $("#notificationmodal").modal("You need to activate the license key in order to use the plugin");
+                }
             }
         });
         
@@ -467,11 +512,16 @@ jQuery(document).ready( function($) {
                 $("#modalcontent").html(response);
                 $("#notificationmodal").modal("show");
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
+            error: function(jqXHR) {
                 $('.loading').css('display', 'none');
                 $(".btn").removeAttr("disabled");
-                $("#modalcontent").html(errorThrown);
-                $("#notificationmodal").modal("show");
+                if (jqXHR.status === 400) {
+                    $("#modalcontent").html("You need to activate the license key in order to use the plugin");
+                      $("#notificationmodal").modal("show");
+                } else {
+                    $("#modalcontent").html(jqXHR);
+                    $("#notificationmodal").modal("You need to activate the license key in order to use the plugin");
+                }
             }
         });
         
@@ -499,11 +549,19 @@ jQuery(document).ready( function($) {
                 $("#modalcontent").html(response);
                 $("#notificationmodal").modal("show");
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
+            error: function(jqXHR) {
                 $('.loading').css('display', 'none');
                 $(".btn").removeAttr("disabled");
-                $("#modalcontent").html(errorThrown);
-                $("#notificationmodal").modal("show");
+                if (jqXHR.status === 400) {
+                    $("#modalcontent").html("You need to activate the license key in order to use the plugin");
+                      $("#notificationmodal").modal("show");
+                } else {
+                    $("#modalcontent").html(jqXHR);
+                    $("#notificationmodal").modal("You need to activate the license key in order to use the plugin");
+                }
+
+              
+              
             }
         });
         return false;

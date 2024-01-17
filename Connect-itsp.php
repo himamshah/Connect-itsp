@@ -29,9 +29,16 @@ global $guard;
 $guard = new Anystack\WpGuard\V001\WpGuard(
     __FILE__,
     [
-        'api_key' => 'AAKMwpKVGrWAArktuIXOgtKSem5p3cYT',
-        'product_id' => '9b12f162-b8b5-465a-a579-6c091ee0e764',
-        'product_name' => 'itsperfect',
+       /* 'api_key' => 'kfDXQzs5VY1aphxEKxtrwwBBmEWOnvIO',
+        'product_id' => '9b10e6cd-0b2c-4897-b52e-5e493be11aa4',
+        'product_name' => 'BG',
+        'updater' => [
+            'enabled' => true, // Enable auto-updater
+        ]*/
+
+        'api_key' => 'H4U43oKCbYntWOeetacGLy7KFRr5ynzs',
+        'product_id' => '9b1aa2d5-9711-4e1c-815c-19b8e301ecdd',
+        'product_name' => 'Connect-itsp',
         'updater' => [
             'enabled' => true, // Enable auto-updater
         ]
@@ -127,7 +134,7 @@ add_action('template_redirect', 'custom_plugin_endpoint_handler');
  */
 add_action('admin_menu', 'kp_register_options_page');
 function kp_register_options_page() {
-    add_menu_page('Connect-itsp Integration', 'Connect-itsp Integration', 'manage_options', 'ip_dashboard', 'kp_dashboard',  plugins_url('itsperfect/logo.png'),);
+    add_menu_page('Connect-itsp Integration', 'Connect-itsp Integration', 'manage_options', 'ip_dashboard', 'kp_dashboard',  plugins_url('Connect-itsp/logo.png'),);
    
     add_submenu_page( 'ip_dashboard', 'Create Products', 'Create Products', 'manage_options', 'ip_create_product', 'kp_create_product_index');
     add_submenu_page( 'ip_dashboard', 'Update Products', 'Update Products', 'manage_options', 'ip_update_product', 'kp_update_product_index');
@@ -186,13 +193,13 @@ else
 
 
 
-
 /**
  * Import Categories
  */
-$guard->validCallback(function() {
 
+$guard->validCallback(function() {
 add_action('wp_ajax_import_categories','import_categories');
+
 function import_categories(){
     $erp_categories = GetCategories();
 
@@ -541,7 +548,11 @@ function kp_deactivation(){
     $sql = "DROP TABLE {$wpdb->base_prefix}erp_settings";
     $wpdb->query($sql);
    
-    
+    delete_option(sprintf('%s_activated', basename(plugin_dir_path(__FILE__))));
+
+    foreach (['key', 'email', 'fingerprint'] as $option) {
+        delete_option(sprintf('%s_license_%s', basename(plugin_dir_path(__FILE__)), $option));
+    }
 
 
 }
@@ -1954,7 +1965,7 @@ function update_product($wp_product_id = ''){
                                                     if ($sale_price) {
                                                         $variation->set_sale_price($sale_price);
                                                     }
-
+                                                    $variation->set_sku($bar_obj->barcode);
                                                     $variation->set_stock_quantity(10);
 
                                                     // Additional updates for size and attributes
@@ -2952,7 +2963,7 @@ if ( ! function_exists( 'add_custom_other_field_content' ) )
             $erp_order_status = 'unsynced';
         }
         
-        $gif =  get_site_url()."/wp-content/plugins/itsperfect/ajax-loader.gif";
+        $gif =  get_site_url()."/wp-content/plugins/Connect-itsp/ajax-loader.gif";
         
         add_meta_box('custom_order_fields', __('Itsperfect Resync order', 'itsperfect-resync-order'), static function () use ($meta,$post,$gif,$erp_order_id,$erp_order_status) {
             $allowedTags = ['strong' => []];

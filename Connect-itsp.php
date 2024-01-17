@@ -8,7 +8,7 @@ use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableControlle
  * Plugin URI: http://scrumwheel.com/
  * Description: Connect-itsp Integration with woocommerce
  * Version: 2.0
- * Author: Scrumwheel Technologies 11
+ * Author: Scrumwheel Technologies
  * Author URI: http://scrumwheel.com/
  * License: GPLv2 or later
  * Text-Domain: Connect-itsp Integration
